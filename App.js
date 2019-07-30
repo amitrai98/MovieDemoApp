@@ -5,7 +5,7 @@ import saga from "redux-saga";
 
 import * as reducers from "./src/reducers";
 import rootSaga from "./src/sagas";
-import { MovieList } from "./src/screens/movies/MoveList";
+import AppNavigator from "./src/AppNavigator";
 
 // The middlewares which will be used in this App
 const middlewares = [];
@@ -25,7 +25,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <Provider store={store}>
-        <MovieList />
+        <AppNavigator />
       </Provider>
     );
   }

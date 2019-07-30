@@ -2,8 +2,11 @@ import { put, takeLatest } from "redux-saga/effects";
 import * as types from "./MovieActions";
 import ApiHandler from "../../networking/ApiHandler";
 import AppLogger from "../../utility/AppLogger";
+
+
+
 export function* handleGetMoviesRequest(action) {
-  types.getMoviesProgress();
+  yield types.getMoviesProgress();
 
   try {
     const api = ApiHandler.getInstance();

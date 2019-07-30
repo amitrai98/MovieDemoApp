@@ -13,7 +13,7 @@ export function getMovies(payload) {
 
 export function getMoviesProgress(payload) {
   return {
-    type: C_INPROGRESS,
+    type: GET_MOVIES_INPROGRESS,
     payload: payload
   };
 }

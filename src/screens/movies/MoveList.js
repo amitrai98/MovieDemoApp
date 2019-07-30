@@ -1,35 +1,40 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { View, Text, FlatList } from "react-native";
 import AppLogger from "../../utility/AppLogger";
 import * as actions from "./MovieActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import AppHeader from "../components/AppHeader";
+import MovieItem from "./MovieItem";
 type Props = {};
 
 export class MovieList extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      movieList: [
-      ]
+      movieList: [1,2,3,4,5]
     };
   }
 
   componentDidMount() {
-    this.props.getMovies();
+    setTimeout(() => {
+      this.props.getMovies();
+
+    }, 1000);
   }
 
-  getrenderData = (item, index) => {
-    return (
-      <View
-        style={{ backgroundColor: "red", margin: 10, width: 50, height: 20 }}
-      >
-        <Text>hello</Text>
-      </View>
-    );
-  };
+  componentDidUpdate(prevProps){
+    let newProp = this.props;
+    if(prevProps.movieReducer.isFetching != newProp.movieReducer.isFetching && !newProp.movieReducer.isFetching){
+      if(newProp.movieReducer.success){
+        AppLogger.log("success"+newProp.movieReducer.data);
+      }else{
+        AppLogger.log("failure"+newProp.movieReducer.error);
+
+      }
+    }
+  }
+
   render() {
     {
       AppLogger.log("length is " + this.state.movieList.length);
@@ -37,7 +42,14 @@ export class MovieList extends Component<Props> {
     return (
       <View>
         <AppHeader />
-        <Text>abra ka dabra</Text>
+        <FlatList
+        data={this.state.movieList}
+        renderItem={({ item, index }) => (
+          <MovieItem
+          item={item}
+          index={index}/>
+        )}
+        />
       </View>
     );
   }
@@ -45,7 +57,7 @@ export class MovieList extends Component<Props> {
 
 const mapStateToProps = state => {
   return {
-    movieReducer: state.movieReducer
+    movieReducer: state.MovieReducer
   };
 };
 
