@@ -12,24 +12,22 @@ export class MovieList extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      movieList: [1,2,3,4,5]
+      movieList: [1,2,3,4,5],
+      refreshing:false
     };
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.props.getMovies();
-
-    }, 1000);
+    this.props.getMovies();
   }
 
-  componentDidUpdate(prevProps){
-    let newProp = this.props;
-    if(prevProps.movieReducer.isFetching != newProp.movieReducer.isFetching && !newProp.movieReducer.isFetching){
-      if(newProp.movieReducer.success){
-        AppLogger.log("success"+newProp.movieReducer.data);
+  componentDidUpdate(prevProps) {
+    if(prevProps.MovieReducer.isFetching != this.props.MovieReducer.isFetching && 
+      !this.props.MovieReducer.isFetching){
+      if(this.props.MovieReducer.success){
+        AppLogger.log("success"+this.props.MovieReducer.data);
       }else{
-        AppLogger.log("failure"+newProp.movieReducer.error);
+        AppLogger.log("failure"+this.props.MovieReducer.error);
 
       }
     }
@@ -42,8 +40,12 @@ export class MovieList extends Component<Props> {
     return (
       <View>
         <AppHeader />
-        <FlatList
+        <FlatList        
         data={this.state.movieList}
+        refreshing={this.state.refreshing}
+        onRefresh={() => {          
+          this.props.getMovies();
+        }}
         renderItem={({ item, index }) => (
           <MovieItem
           item={item}
@@ -57,7 +59,7 @@ export class MovieList extends Component<Props> {
 
 const mapStateToProps = state => {
   return {
-    movieReducer: state.MovieReducer
+    MovieReducer: state.MovieReducer
   };
 };
 

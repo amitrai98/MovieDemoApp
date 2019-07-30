@@ -1,5 +1,4 @@
-import * as types from "./MovieActions";
-
+import * as types from "../movies/MovieActions"
 const initialState = {
   data: {},
   isFetching: false,
@@ -8,7 +7,7 @@ const initialState = {
   error: {}
 };
 
-export default function moviesReducer(state = initialState, action = {}) {
+export default function movieReducer(state = initialState, action = {}) {
   switch (action.type) {
     case types.GET_MOVIES_INPROGRESS:
       return {
