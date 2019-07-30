@@ -6,15 +6,19 @@ import AppLogger from "../../utility/AppLogger";
 
 
 export function* handleGetMoviesRequest(action) {
-  yield put({ type: types.GET_MOVIES_INPROGRESS});
-
+  
   try {
+    yield put({
+      type: types.GET_MOVIES_INPROGRESS
+    });
     const api = ApiHandler.getInstance();
-    response = yield api.getMovies();
-    yield put({ type: types.GET_MOVIES_SUCCESS, payload: response });
-  } catch (err) {
-    AppLogger.log("Error in getting movie list" + err);
-    yield put({ type: types.GET_MOVIES_FAILURE, error: err });
+    const response = yield api.getMovies();
+    yield put({
+      type: types.GET_MOVIES_SUCCESS,
+      data: response
+    });
+  } catch (e) {
+    yield put({ type: types.GET_MOVIES_FAILURE, error: e });
   }
 }
 

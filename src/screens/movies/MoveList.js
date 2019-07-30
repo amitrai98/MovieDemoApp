@@ -12,7 +12,7 @@ export class MovieList extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      movieList: [1,2,3,4,5],
+      movieList: [],
       refreshing:false
     };
   }
@@ -26,21 +26,28 @@ export class MovieList extends Component<Props> {
       !this.props.MovieReducer.isFetching){
       if(this.props.MovieReducer.success){
         AppLogger.log("success"+this.props.MovieReducer.data);
+        if(this.props.MovieReducer.data.response.data != undefined){
+          while( this.state.movieList.length > 0) {
+            this.state.movieList.pop();
+        }
+          this.state.movieList.push(this.props.MovieReducer.data.response.data);
+          this.forceUpdate();
+      }
       }else{
         AppLogger.log("failure"+this.props.MovieReducer.error);
-
       }
     }
   }
 
   render() {
-    {
-      AppLogger.log("length is " + this.state.movieList.length);
-    }
+    
     return (
       <View>
-        <AppHeader />
-        <FlatList        
+        <AppHeader 
+        headerTitle={"Movie List"}/>
+        {this.state.movieList != undefined && this.state.movieList.length>0?
+        
+        <FlatList       
         data={this.state.movieList}
         refreshing={this.state.refreshing}
         onRefresh={() => {          
@@ -52,6 +59,9 @@ export class MovieList extends Component<Props> {
           index={index}/>
         )}
         />
+      :
+      <View><Text>No Data to show</Text></View>
+      }
       </View>
     );
   }
@@ -64,7 +74,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  AppLogger.log("i was called");
   return {
     getMovies: bindActionCreators(actions.getMovies, dispatch)
   };

@@ -1,4 +1,5 @@
 import * as types from "../movies/MovieActions"
+
 const initialState = {
   data: {},
   isFetching: false,
